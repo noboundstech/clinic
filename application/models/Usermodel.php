@@ -1,6 +1,8 @@
 <?php
 class Usermodel extends CI_Model {
     
+	private $user_category_table = 'usercategory';
+	
     function __construct() {
         parent::__construct();
 		$this->load->database();
@@ -31,6 +33,62 @@ class Usermodel extends CI_Model {
         $this->db->order_by('user_firstname', 'ASC');
         $query = $this->db->get();
 		return json_encode($query->result());
+	}
+	
+	//list all user categories
+    function listUserCategory() {
+		$this->db->select('*');
+		$this->db->from($this->user_category_table);
+		$this->db->where('status !=', 0);
+        $query = $this->db->get();
+		return $query->result();
+	}
+	
+	//get user category value by id
+	function getCategoryValueById($id) {
+		$this->db->select('*');
+		$this->db->from($this->user_category_table);
+		$this->db->where('usercategory_id', $id);
+        $query = $this->db->get();
+		return $query->result();
+	}
+	
+	//create user categories  
+	function createUserCategory($post) {
+		if(!empty($post['usercategory_name'])) {
+			$this->db->select_max('usercategory_id');
+			$query = $this->db->get($this->user_category_table); 
+			$res = $query->result();
+			$id = ($res[0]->usercategory_id)+1;
+			
+			$this->db->set('usercategory_id', $id);
+			$this->db->set('usercategory_name', $post['usercategory_name']);
+			$res = $this->db->insert($this->user_category_table);
+		}
+		
+		return ($id < 1) ? false : true;	
+	} 
+	
+	//update user categories   
+	function editUserCategory($post) {
+		if(!empty($post['usercategory_id'])) {
+			$this->db->set('usercategory_name', $post['usercategory_name']);
+			$this->db->where('usercategory_id', $post['usercategory_id']);
+			$result = $this->db->update($this->user_category_table);
+		}
+		
+		return ($result) ? true : false;
+	}  
+	
+	// delete user categories 
+	function deleteUserCategory($usercategory_id) {
+		if( !empty($usercategory_id) ) {
+			$this->db->set('status', 0);
+			$this->db->where('usercategory_id', $usercategory_id);
+			$result = $this->db->update($this->user_category_table);
+		}
+		
+		return ($result) ? true : false;
 	}
 }
 ?>    

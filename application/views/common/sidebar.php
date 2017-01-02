@@ -40,9 +40,28 @@
 					<li>
 						<?php echo anchor('auth/permissions', 'Permissions', array('title' => 'Permissions'));?>
 					</li>
+					
 				</ul>
 			</li>
-			
+			<li><a><i class="fa fa-home"></i> Settings <span class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu">
+					<li>
+						<?php echo anchor('department/master', 'Departments', array('title' => 'Departments'));?>
+					</li>
+					<li>
+						<?php echo anchor('test/category', 'Test Category', array('title' => 'Test Category'));?>
+					</li>
+					<li>
+						<?php echo anchor('test/index', 'Test', array('title' => 'Test'));?>
+					</li>
+					<li>
+						<?php echo anchor('test/pricelist', 'Test Price', array('title' => 'Test Price'));?>
+					</li>
+					<li>
+						<?php echo anchor('user/category', 'User Category', array('title' => 'User Category'));?>
+					</li>
+				</ul>
+			</li>
 		</ul>
 	</div>
 

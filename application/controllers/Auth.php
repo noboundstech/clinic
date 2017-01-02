@@ -7,6 +7,7 @@ class Auth extends CI_Controller {
 		parent::__construct();
 		
 		$this->load->library('Aranax_Auth');
+		$this->load->model('authmodel');
 		$this->load->helper('html');
 		$this->load->helper('url');
 		$this->load->helper('form');
@@ -85,6 +86,58 @@ class Auth extends CI_Controller {
 		
 	}
 
+	//get department values by idat
+	function getRoleById() {
+		if ( !$this->aranax_auth->is_logged_in() || !$this->aranax_auth->has_access() ) {
+			redirect("unauthorised");
+		}
+		else {
+			$role_val = $this->authmodel->getRoleValueById($this->uri->segment(3));
+			$var = '';
+			foreach($role_val as $role) {
+				$var = $role->role_name.','.$role->role_description;
+			}
+			echo $var;
+		}
+	}
+	
+	//edit role
+	function editRole() {
+		if ( !$this->aranax_auth->is_logged_in() || !$this->aranax_auth->has_access() ) {
+			redirect("unauthorised");
+		}
+		else {
+				if($this->input->post('role_id')) {
+				$status = $this->authmodel->editRole($this->input->post('role_id'), $this->input->post('role_name'), $this->input->post('role_description'));
+				if($status){
+					$this->session->set_flashdata('success', 'Role updated successfully');	
+				}else{
+					$this->session->set_flashdata('failure', 'Role update failed');
+				}
+			}	
+			redirect("auth/roles");
+		}
+		
+	}
+	
+	//delete role
+	function removerole() {
+		if ( !$this->aranax_auth->is_logged_in() || !$this->aranax_auth->has_access() ) {
+			redirect("unauthorised");
+		}
+		else {
+				if( $this->uri->segment(3) ) {
+					$status = $this->authmodel->deleteRole($this->uri->segment(3));
+					if($status){
+						$this->session->set_flashdata('success', 'Role deleted successfully');	
+					}else{
+						$this->session->set_flashdata('failure', 'Role deletion failed');
+					}
+				}
+			}
+		redirect("auth/roles");	
+	}
+	
 	//create url
 	function createurl() {
 		//$this->output->enable_profiler(TRUE);

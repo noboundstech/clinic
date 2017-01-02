@@ -29,6 +29,7 @@ class Authmodel extends CI_Model {
 		$role_table = 'auth_roles';
         $this->db->select('role_id, role_name');
         $this->db->from($role_table);
+		$this->db->where('status', 1);
         $this->db->order_by('role_name', 'ASC');
         $query = $this->db->get();
 		$dropdowns = $query->result();
@@ -44,8 +45,19 @@ class Authmodel extends CI_Model {
 	//get user roles
 	function get_user_roles() {
 		$role_table = 'auth_roles';
+		$this->db->where('status', 1);
 		$query = $this->db->get($role_table);
         return $query->result();
+	}
+	
+	//get role value by id
+	function getRoleValueById($id) {
+		$role_table = 'auth_roles';
+		$this->db->select('*');
+		$this->db->from($role_table);
+		$this->db->where('role_id', $id);
+        $query = $this->db->get();
+		return $query->result();
 	}
 	
 	//create user role 
@@ -62,6 +74,32 @@ class Authmodel extends CI_Model {
 		}
 		
 		return ($id == 0) ? false : true;	
+	}
+	
+	//update role  
+	function editRole($role_id, $role_name, $role_description) {
+		$role_table = 'auth_roles';
+		if(!empty($role_name)) {
+			$this->db->set('role_name', $role_name);
+			$this->db->set('role_description', $role_description);
+			$this->db->where('role_id', $role_id);
+			$result = $this->db->update($role_table);
+		}
+		
+		return ($result) ? true : false;
+	}  
+	
+	// delete roles
+	function deleteRole($role_id) {
+		echo $role_id;
+		$role_table = 'auth_roles';
+		if( !empty($role_id) ) {
+			$this->db->set('status', 0);
+			$this->db->where('role_id', $role_id);
+			$result = $this->db->update($role_table);
+		}
+		
+		return ($result) ? true : false;
 	}
 	
 	//get auth url

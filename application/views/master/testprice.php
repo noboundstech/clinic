@@ -1,12 +1,12 @@
 <div class="">
 	<div class="page-title">
 		<div class="title_left">
-			<h1>User Roles</h1>
+			<h1>Test Price</h1>
 		</div>
 		<div class="title_right">
 			<div class="pull-right">
 				<div class="input-group">
-					<a class="btn btn-primary btn-xs btn-create">Add New Role</a>
+					<a class="btn btn-primary btn-xs btn-create">Add New Price</a>
 				</div>
 			</div>
 		</div>
@@ -38,7 +38,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Create New Role</h2>
+					<h2>Add New Test Price</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -50,25 +50,39 @@
 						'id' 		=> 	'roleform',
 						'data-parsley-validate'	=>	''
 					);	
-					echo form_open('auth/createrole', $form);
+					echo form_open('test/addprice', $form);
 					?>
 					<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role_name">Role <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Test Name <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<input type="text" id="role_name" name="role_name" required="required" class="form-control col-md-7 col-xs-12">
+							<select id="test_id" name="test_id" class="form-control col-md-7 col-xs-12" required="required">
+								<option value="">Select</option>
+							<?php
+							foreach($tests as $test) {
+								?>
+								<option value="<?php echo $test->test_id; ?>"><?php echo $test->test_name; ?></option>
+								<?php
+							}
+							?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="net_price">Net Price <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="text" id="net_price" name="net_price" required="required" class="form-control col-md-7 col-xs-12">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gross_price">MRP <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="text" id="gross_price" name="gross_price" required="required" class="form-control col-md-7 col-xs-12">
 						</div>
 					</div>
 							
-					<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role_description">Description <span class="required">*</span>
-						</label>
-						<div class="col-md-6 col-sm-6 col-xs-12">
-							<textarea id="role_description" required="required" class="form-control" name="role_description" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-maxlength="200" data-parsley-minlength-message="Come on! You need to enter at least a 10 caracters long comment.."
-                            data-parsley-validation-threshold="10"></textarea>
-						</div>
-					</div>
-						
 					<div class="ln_solid"></div>
 					<div class="form-group">
 						<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -83,11 +97,11 @@
 		</div>
 	</div>
 		
-	<div class="row row-edit" style="display: none;" id="row-edit">
+	<div class="row row-edit" style="display: none;" id="row-edit"><!---->
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Edit Role</h2>
+					<h2>Edit Test Price</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -99,26 +113,39 @@
 						'id' 		=> 	'roleform',
 						'data-parsley-validate'	=>	''
 					);	
-					echo form_open('auth/editRole', $form);
+					echo form_open('test/editprice', $form);
 					?>
 					<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role_name">Role <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Test Name <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<input type="text" id="role_name1" name="role_name" required="required" class="form-control col-md-7 col-xs-12">
+							<select id="test_id1" name="test_id" class="form-control col-md-7 col-xs-12" required="required">
+								<option value="">Select</option>
+							<?php
+							foreach($tests as $test) {
+								?>
+								<option value="<?php echo $test->test_id; ?>"><?php echo $test->test_name; ?></option>
+								<?php
+							}
+							?>
+							</select>
 						</div>
 					</div>
-							
 					<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="role_description">Description <span class="required">*</span>
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="net_price">Net Price <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<textarea id="role_description1" required="required" class="form-control" name="role_description" data-parsley-trigger="keyup" data-parsley-minlength="10" data-parsley-maxlength="200" data-parsley-minlength-message="Come on! You need to enter at least a 10 caracters long comment.."
-                            data-parsley-validation-threshold="10"></textarea>
+							<input type="text" id="net_price1" name="net_price" required="required" class="form-control col-md-7 col-xs-12">
 						</div>
 					</div>
-					
-					<input type="hidden" name="role_id" id="role_id1">
+					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gross_price">MRP <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="text" id="gross_price1" name="gross_price" required="required" class="form-control col-md-7 col-xs-12">
+						</div>
+					</div>
+					<input type="hidden" id="test_price_id1" name="test_price_id">
 					<div class="ln_solid"></div>
 					<div class="form-group">
 						<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -132,12 +159,12 @@
 			</div>
 		</div>
 	</div>
-		
+
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Available Roles</h2>
+					<h2>Tests Prices</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -145,23 +172,27 @@
 						<thead>
 							<tr>
 								<th>#</th>
-								<th>Role</th>
-								<th>Description</th>
+								<th>Test</th>
+								<th>Net Price</th>
+								<th>MRP</th>
+								<th>Commission Price</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
 							$n	=	1;
-							foreach($roles as $role){
+							foreach($prices as $price){
 								?>
 								<tr>
 									<th><?php echo $n;?></th>
-									<td><?php echo $role->role_name;?></td>
-									<td><?php echo $role->role_description;?></td>
+									<td><?php echo $price->test_name;?></td>
+									<td><?php echo $price->net_price;?></td>
+									<td><?php echo $price->gross_price;?></td>
+									<td><?php echo $price->commission_price;?></td>
 									<td>
-										<a href="javascript:void(0);" class="btn btn-primary btn-xs btn-edit" onclick="ajaxEditRoles(<?php echo $role->role_id;?>)">Edit</a>&nbsp;&nbsp;&nbsp;
-										<a href="removerole/<?php echo $role->role_id; ?>" class="btn btn-danger btn-xs btn-delete" onclick="return confirm('Are you sure ?')">Delete</a>
+										<a href="javascript::void()" class="btn btn-primary btn-xs btn-edit" onclick="ajaxEditTestPrice(<?php echo $price->test_price_id;?>)">Edit</a>&nbsp;&nbsp;&nbsp;
+										<a href="removeprice/<?php echo $price->test_price_id; ?>" class="btn btn-danger btn-xs btn-delete" onclick="return confirm('Are you sure ?')">Delete</a>
 									</td>
 								</tr>
 								<?php	
@@ -175,31 +206,27 @@
 			</div>
 		</div>
 	</div>	<!-- /row -->
-		
-		
-	
-</div>			
 
 <script>
-function ajaxEditRoles(id){
+function ajaxEditTestPrice(id){
 	jQuery.ajax({
 					type: "POST",
-					url: "<?php echo base_url(); ?>" + "auth/getRoleById/"+id,
+					url: "<?php echo base_url(); ?>" + "test/getPriceById/"+id,
 					success: function(res) {
 												if (res)
 												{
-													var role_arr = res.split(",");
-													console.log(res);
+													var arr = res.split(',');
 													$('#row-edit').show();
-													$('#role_description1').val(role_arr[1].trim());
-													$('#role_name1').val(role_arr[0].trim());
-													$('#role_id1').val(id);
+													$('#test_id1').val(arr[0].trim());
+													$('#net_price1').val(arr[1].trim());
+													$('#gross_price1').val(arr[2].trim());
+													$('#test_price_id1').val(id);
 												}
 											}
 				});
 }
 </script>
-
+	
 <?php
 $this->load->view("common/footer");
 ?>
