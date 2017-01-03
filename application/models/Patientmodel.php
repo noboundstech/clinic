@@ -1,10 +1,10 @@
 <?php
-class Testmodel extends CI_Model {
+class Patientmodel extends CI_Model {
     
-	private $test_category_table = 'testcategory';
-	private $test_table = 'test';
-	private $department_table = 'department_master';
-	private $test_price_table = 'test_price';
+	private $patient_order_table 	= 'patient_order_table';
+	private $patient_table 			= 'patient_details';
+	private $patient_test_table 	= 'patient_test_table';
+	//private $test_price_table 		= 'test_price';
 	
     function __construct() {
         parent::__construct();
@@ -14,8 +14,8 @@ class Testmodel extends CI_Model {
     }
     
 	//list all tests
-    function listTest() {
-		$query = $this->db->query('SELECT a.*,b.*,c.* FROM '.$this->test_table.' AS a, '.$this->test_category_table.' AS b, '.$this->department_table.' AS c WHERE a.department_id=c.department_id AND a.testcategory_id=b.testcategory_id AND a.status!=0');
+    function listPatient() {
+		$query = $this->db->query('SELECT * FROM '.$this->patient_table.' WHERE status!=0');
 		return $query->result();
 	}
 	
@@ -28,20 +28,35 @@ class Testmodel extends CI_Model {
 		return $query->result();
 	}
 	
-	//create test  
-	function createTest($post) {
-		if(!empty($post['test_name'])) {
-			$this->db->select_max('test_id');
-			$query = $this->db->get($this->test_table); 
+	//create Patient
+	function createPatient($post) {
+		if(!empty($post['testcategory'])) {
+			$this->db->select_max('patient_id');
+			$query = $this->db->get($this->patient_table); 
 			$res = $query->result();
-			$id = ($res[0]->test_id)+1;
-			
-			$this->db->set('test_id', $id);
-			$this->db->set('test_name', $post['test_name']);
-			$this->db->set('test_short_name', $post['test_short_name']);
-			$this->db->set('testcategory_id', $post['testcategory_id']);
-			$this->db->set('department_id', $post['department_id']);
-			$res = $this->db->insert($this->test_table);
+			$id = ($res[0]->patient_id)+1;
+			echo $id;
+			if($post['testcategory']=='1')
+			{
+				$this->db->set('patient_id',$id);
+				$this->db->set('patient_name',$post['patient_name']);
+				$this->db->set('patient_address',$post['patient_address']);
+				$this->db->set('patient_phone',$post['patient_phoneno']);
+				$this->db->set('patient_email',$post['patient_email']);
+				$this->db->set('patient_age',$post['patient_age']);
+				$this->db->set('patient_gender',$post['patient_gender']);
+				$this->db->set('patient_password',$post['patient_phoneno']);
+				$res = $this->db->insert($this->patient_table);
+
+			}
+			$this->db->select_max('patient_order_id');
+			$query2 = $this->db->get($this->patient_order_table); 
+			$res2 = $query2->result();
+			$id2 = ($res2[0]->patient_order_id)+1;
+			$this->db->set('patient_order_id', $id2);
+			$this->db->set('patient_id', $id);
+			$this->db->set('center_id','1');
+			$res2 = $this->db->insert($this->patient_order_table);
 		}
 		
 		return ($id < 1) ? false : true;	
@@ -74,15 +89,9 @@ class Testmodel extends CI_Model {
 	
 	//list all test categories
     function listTestCategory() {
-		$query = $this->db->query('SELECT a.*,b.* FROM '.$this->test_category_table.' AS a, '.$this->department_table.' AS b WHERE a.department_id=b.department_id AND a.status!=0');
-		return $query->result();
-	}
-	
-	//department wise test category list
-	function departmentWiseTestCategory($department_id) {
 		$this->db->select('*');
 		$this->db->from($this->test_category_table);
-		$this->db->where('department_id', $department_id);
+		$this->db->where('status !=', 0);
         $query = $this->db->get();
 		return $query->result();
 	}
@@ -97,7 +106,7 @@ class Testmodel extends CI_Model {
 	}
 	
 	//create category  
-	function createTestCategory($testcategory_name, $department_id) {
+	function createTestCategory($testcategory_name) {
 		if(!empty($testcategory_name)) {
 			$this->db->select_max('testcategory_id');
 			$query = $this->db->get($this->test_category_table); 
@@ -105,7 +114,6 @@ class Testmodel extends CI_Model {
 			$id = ($res[0]->testcategory_id)+1;
 			
 			$this->db->set('testcategory_id', $id);
-			$this->db->set('department_id', $department_id);
 			$this->db->set('testcategory_name', $testcategory_name);
 			$res = $this->db->insert($this->test_category_table);
 		}
@@ -114,9 +122,8 @@ class Testmodel extends CI_Model {
 	} 
 		
 	//update category  
-	function editTestCategory($testcategory_id, $testcategory_name, $department_id) {
+	function editTestCategory($testcategory_id, $testcategory_name) {
 		if(!empty($testcategory_name)) {
-			$this->db->set('department_id', $department_id);
 			$this->db->set('testcategory_name', $testcategory_name);
 			$this->db->where('testcategory_id', $testcategory_id);
 			$result = $this->db->update($this->test_category_table);

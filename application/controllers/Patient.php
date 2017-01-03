@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Test extends CI_Controller {
+class Patient extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
@@ -10,7 +10,8 @@ class Test extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->helper('form');
 		$this->load->model('testmodel');
-		$this->load->model('departmentmodel');
+		//$this->load->model('departmentmodel');
+		$this->load->model('patientmodel');
 	}
 		
 	//list of all tests
@@ -20,13 +21,14 @@ class Test extends CI_Controller {
 		}
 		else {
 			$data["role_options"] =	$this->aranax_auth->get_user_roles_option();
+			$data["patients"] = $this->patientmodel->listPatient();
 			$data["tests"] = $this->testmodel->listTest();
-			$data["testcategory"] = $this->testmodel->listTestCategory();
-			$data["departments"] = $this->departmentmodel->list_all_departments();
+			//$data["testcategory"] = $this->testmodel->listTestCategory();
+			//$data["departments"] = $this->departmentmodel->list_all_departments();
 		}
-		$data["page_title"]	= "All Tests";
+		$data["page_title"]	= "Add Patient";
 		$this->load->view("common/header", $data);
-		$this->load->view("master/test", $data);
+		$this->load->view("patient/patient", $data);
 	}
 	
 	//get test values by id
@@ -43,20 +45,21 @@ class Test extends CI_Controller {
 	}
 	
 	//create test
-	function createtest() {
+	function createpatient() {
 		if ( !$this->aranax_auth->is_logged_in() || !$this->aranax_auth->has_access() ) {
 			redirect("unauthorised");
 		}
 		else {
-				if($this->input->post('test_name')) {
-				$status = $this->testmodel->createTest($this->input->post());
+				echo $this->input->post('testcategory');
+				if($this->input->post('testcategory')) {
+				$status = $this->patientmodel->createPatient($this->input->post());
 				if($status){
-					$this->session->set_flashdata('success', 'Test created successfully');	
+					$this->session->set_flashdata('success', 'Patient created successfully');	
 				}else{
-					$this->session->set_flashdata('failure', 'Test creation failed');
+					$this->session->set_flashdata('failure', 'Patient creation failed');
 				}
 			}	
-			redirect("test/index");
+			redirect("patient/index");
 		}
 		
 	}
@@ -98,18 +101,6 @@ class Test extends CI_Controller {
 		redirect("test/index");
 	}
 		
-	// get department wise category
-	function getDepartmentWiseTestCategory($department_id, $list_type) {
-		$list = '<option value="">Select</option>';
-		$category_list = $this->testmodel->departmentWiseTestCategory($department_id);
-		if( $list_type == 'select' ) {
-			foreach($category_list as $cat_list) {
-				$list = $list."<option value='".$cat_list->testcategory_id."'>".$cat_list->testcategory_name."</option>";
-			}
-		}
-		echo $list;
-	}
-		
 	//list all test categories
 	function category() {
 		if ( !$this->aranax_auth->is_logged_in() || !$this->aranax_auth->has_access() ) {
@@ -118,7 +109,6 @@ class Test extends CI_Controller {
 		else {
 			$data["role_options"] =	$this->aranax_auth->get_user_roles_option();
 			$data["categories"] = $this->testmodel->listTestCategory();
-			$data["departments"] = $this->departmentmodel->list_all_departments();
 		}
 		$data["page_title"]	= "All Test Categories";
 		$this->load->view("common/header", $data);
@@ -133,7 +123,7 @@ class Test extends CI_Controller {
 		else {
 			$category_val = $this->testmodel->getCategoryValueById($this->uri->segment(3));
 			foreach($category_val as $cat_val) {
-				echo $cat_val->testcategory_name.','.$cat_val->department_id;
+				echo $cat_val->testcategory_name;
 			}
 		}
 	}
@@ -145,7 +135,7 @@ class Test extends CI_Controller {
 		}
 		else {
 				if($this->input->post('testcategory_name')) {
-				$status = $this->testmodel->createTestCategory($this->input->post('testcategory_name'), $this->input->post('department_id'));
+				$status = $this->testmodel->createTestCategory($this->input->post('testcategory_name'));
 				if($status){
 					$this->session->set_flashdata('success', 'Category created successfully');	
 				}else{
@@ -164,7 +154,7 @@ class Test extends CI_Controller {
 		}
 		else {
 				if($this->input->post('testcategory_name')) {
-				$status = $this->testmodel->editTestCategory($this->input->post('testcategory_id'), $this->input->post('testcategory_name'), $this->input->post('department_id'));
+				$status = $this->testmodel->editTestCategory($this->input->post('testcategory_id'), $this->input->post('testcategory_name'));
 				if($status){
 					$this->session->set_flashdata('success', 'Category updated successfully');	
 				}else{

@@ -8,7 +8,7 @@
 			<li><a><i class="fa fa-home"></i> Patient <span class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu">
 					<li>
-						<?php echo anchor('patient/registration', 'Registration', array('title' => 'Registration'));?>
+						<?php echo anchor('patient/index', 'Registration', array('title' => 'Registration'));?>
 					</li>
 				</ul>
 			</li>
@@ -27,7 +27,7 @@
 				</ul>
 			</li>
 			<li>
-				<?php echo anchor('doctors/schedule', '<i class="fa fa-home"></i>Doctor\'s Schedule', array('title' => 'Doctor\'s Schedule'));?>
+				<?php echo anchor('doctor/index', '<i class="fa fa-home"></i>Doctor\'s', array('title' => 'Doctor\'s'));?>
 			</li>
 			<li><a><i class="fa fa-home"></i> Users / Permissions <span class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu">
@@ -45,6 +45,9 @@
 			</li>
 			<li><a><i class="fa fa-home"></i> Settings <span class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu">
+					<li>
+						<?php echo anchor('centers/master', 'Centers', array('title' => 'Centers'));?>
+					</li>
 					<li>
 						<?php echo anchor('department/master', 'Departments', array('title' => 'Departments'));?>
 					</li>

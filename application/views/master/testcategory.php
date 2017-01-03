@@ -53,6 +53,22 @@
 					echo form_open('test/createcategory', $form);
 					?>
 					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Department <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<select id="department_id" name="department_id" class="form-control col-md-7 col-xs-12" required="required">
+								<option value="">Select</option>
+							<?php
+							foreach($departments as $department) {
+								?>
+								<option value="<?php echo $department->department_id; ?>"><?php echo $department->department_name; ?></option>
+								<?php
+							}
+							?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="testcategory_name">Category Name <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
@@ -93,6 +109,22 @@
 					echo form_open('test/editcategory', $form);
 					?>
 					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Department <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<select id="department_id1" name="department_id" class="form-control col-md-7 col-xs-12" required="required">
+								<option value="">Select</option>
+							<?php
+							foreach($departments as $department) {
+								?>
+								<option value="<?php echo $department->department_id; ?>"><?php echo $department->department_name; ?></option>
+								<?php
+							}
+							?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="testcategory_name">Category Name <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
@@ -127,6 +159,7 @@
 							<tr>
 								<th>#</th>
 								<th>Category</th>
+								<th>Department</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -138,6 +171,7 @@
 								<tr>
 									<th><?php echo $n;?></th>
 									<td><?php echo $category->testcategory_name;?></td>
+									<td><?php echo $category->department_name;?></td>
 									<td>
 										<a href="javascript::void()" class="btn btn-primary btn-xs btn-edit" onclick="ajaxEditTestCategory(<?php echo $category->testcategory_id;?>)">Edit</a>&nbsp;&nbsp;&nbsp;
 										<a href="removecategory/<?php echo $category->testcategory_id; ?>" class="btn btn-danger btn-xs btn-delete" onclick="return confirm('Are you sure ?')">Delete</a>
@@ -163,8 +197,10 @@ function ajaxEditTestCategory(id){
 					success: function(res) {
 												if (res)
 												{
+													var arr = res.split(',');
 													$('#row-edit').show();
-													$('#testcategory_name1').val(res.trim());
+													$('#testcategory_name1').val(arr[0].trim());
+													$('#department_id1').val(arr[1].trim());
 													$('#testcategory_id1').val(id);
 												}
 											}

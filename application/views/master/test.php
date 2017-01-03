@@ -67,26 +67,10 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Test Category <span class="required">*</span>
-						</label>
-						<div class="col-md-6 col-sm-6 col-xs-12">
-							<select id="testcategory_id" name="testcategory_id" class="form-control col-md-7 col-xs-12" required="required">
-								<option value="">Select</option>
-							<?php
-							foreach($testcategory as $testcat) {
-								?>
-								<option value="<?php echo $testcat->testcategory_id; ?>"><?php echo $testcat->testcategory_name; ?></option>
-								<?php
-							}
-							?>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Department <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<select id="department_id" name="department_id" class="form-control col-md-7 col-xs-12" required="required">
+							<select id="department_id" name="department_id" class="form-control col-md-7 col-xs-12" required="required" onchange="ajaxDepartmentWiseCategory('add')">
 								<option value="">Select</option>
 							<?php
 							foreach($departments as $department) {
@@ -98,7 +82,17 @@
 							</select>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Test Category <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12" id="tct">
+							<select id="testcategory_id" name="testcategory_id" class="form-control col-md-7 col-xs-12" required="required">
+								<option value="">Select</option>
 							
+							</select>
+						</div>
+					</div>
+												
 					<div class="ln_solid"></div>
 					<div class="form-group">
 						<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -146,26 +140,10 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Test Category <span class="required">*</span>
-						</label>
-						<div class="col-md-6 col-sm-6 col-xs-12">
-							<select id="testcategory_id1" name="testcategory_id" class="form-control col-md-7 col-xs-12" required="required">
-								<option value="">Select</option>
-							<?php
-							foreach($testcategory as $testcat) {
-								?>
-								<option value="<?php echo $testcat->testcategory_id; ?>"><?php echo $testcat->testcategory_name; ?></option>
-								<?php
-							}
-							?>
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Department <span class="required">*</span>
 						</label>
 						<div class="col-md-6 col-sm-6 col-xs-12">
-							<select id="department_id1" name="department_id" class="form-control col-md-7 col-xs-12" required="required">
+							<select id="department_id1" name="department_id" class="form-control col-md-7 col-xs-12" required="required" onchange="ajaxDepartmentWiseCategory('edit')">
 								<option value="">Select</option>
 							<?php
 							foreach($departments as $department) {
@@ -177,6 +155,17 @@
 							</select>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3 col-sm-3 col-xs-12" for="test_name">Test Category <span class="required">*</span>
+						</label>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<select id="testcategory_id1" name="testcategory_id" class="form-control col-md-7 col-xs-12" required="required">
+								<option value="">Select</option>
+							
+							</select>
+						</div>
+					</div>
+					
 					<input type="hidden" id="test_id1" name="test_id">
 					<div class="ln_solid"></div>
 					<div class="form-group">
@@ -251,9 +240,41 @@ function ajaxEditTest(id){
 													$('#row-edit').show();
 													$('#test_name1').val(arr[0].trim());
 													$('#test_short_name1').val(arr[1].trim());
-													$('#testcategory_id1').val(arr[2].trim());
 													$('#department_id1').val(arr[3].trim());
 													$('#test_id1').val(id);
+													ajaxDepartmentWiseCategory('edit', arr[3].trim(), arr[2].trim());
+												}
+											}
+				});
+				
+	
+}
+
+function ajaxDepartmentWiseCategory(type, idd, tcid){
+	if(type == 'add'){
+		var id = $('#department_id').val();
+	}
+	if(type == 'edit'){
+		if(!typeof(idd) == 'undefined'){
+			var id = idd;
+		}
+		else{
+			var id = $('#department_id1').val();
+		}
+	}
+	jQuery.ajax({
+					type: "POST",
+					url: "<?php echo base_url(); ?>" + "test/getDepartmentWiseTestCategory/"+id+"/select",
+					success: function(res) {
+												if (res)
+												{ 
+													if(type == 'add'){
+														$('#testcategory_id').html(res);
+													}
+													if(type == 'edit'){
+														$('#testcategory_id1').html(res);
+														$('#testcategory_id1').val(tcid);
+													}
 												}
 											}
 				});
